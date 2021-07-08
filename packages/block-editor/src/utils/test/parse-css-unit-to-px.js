@@ -6,6 +6,8 @@ import {
 	getPxFromCssUnit,
 } from '../parse-css-unit-to-px';
 
+jest.useRealTimers();
+
 describe( 'getPxFromCssUnit', () => {
 	// Absolute units
 	it( 'test px return px unit', () => {
