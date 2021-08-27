@@ -95,7 +95,10 @@
 			"__experimentalFontWeight": true,
 			"__experimentalTextTransform": true,
 			"__experimentalFontFamily": true,
-			"__experimentalTextDecoration": true
+			"__experimentalTextDecoration": true,
+			"__experimentalDefaultControls": {
+				"fontSize": true
+			}
 		},
 		"spacing": {
 			"blockGap": true,
