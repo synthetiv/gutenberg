@@ -2,12 +2,13 @@
  * WordPress dependencies
  */
 import { __, _x } from '@wordpress/i18n';
-import { Placeholder, TextControl, Button } from '@wordpress/components';
+import { TextControl, Button } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { blockDefault } from '@wordpress/icons';
 import {
 	useBlockProps,
 	__experimentalUseInnerBlocksProps as useInnerBlocksProps,
+	Placeholder,
 } from '@wordpress/block-editor';
 
 const ALLOWED_BLOCKS = [
