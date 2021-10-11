@@ -102,8 +102,8 @@ export default function PageListEdit( {
 	const showChildPageToggle = useSelect( ( select ) => {
 		const { getCurrentPostType } = select( editorStore );
 		const currentPostType = getCurrentPostType();
-		const allowedTypes = [ 'page', 'wp_template' ];
-		return allowedTypes.includes( currentPostType );
+		const hideToggleFrom = [ 'post' ];
+		return ! hideToggleFrom.includes( currentPostType );
 	} );
 
 	useEffect( () => {
