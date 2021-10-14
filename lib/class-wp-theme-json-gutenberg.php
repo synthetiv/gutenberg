@@ -120,6 +120,7 @@ class WP_Theme_JSON_Gutenberg {
 			'dropCap'               => null,
 			'fontFamilies'          => null,
 			'fontSizes'             => null,
+			'webfonts'              => null,
 		),
 	);
 

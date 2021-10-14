@@ -340,6 +340,18 @@ function gutenberg_global_styles_include_support_for_wp_variables( $allow_css, $
 }
 
 /**
+ * Register webfonts defined in theme.json.
+ */
+function gutenberg_register_webfonts_from_theme_json() {
+	if ( function_exists( 'wp_register_webfonts' ) ) {
+		$theme_settings = WP_Theme_JSON_Resolver_Gutenberg::get_theme_data()->get_settings();
+		if ( ! empty( $theme_settings['typography'] ) && ! empty( $theme_settings['typography']['webfonts'] ) ) {
+			wp_register_webfonts( $theme_settings['typography']['webfonts'] );
+		}
+	}
+}
+
+/**
  * This is for using kses to test user data.
  *
  * @param array $atts Allowed CSS property names, according to kses.
@@ -360,6 +372,7 @@ if ( function_exists( 'get_block_editor_settings' ) ) {
 
 add_action( 'init', 'gutenberg_experimental_global_styles_register_user_cpt' );
 add_action( 'wp_enqueue_scripts', 'gutenberg_experimental_global_styles_enqueue_assets' );
+add_action( 'after_setup_theme', 'gutenberg_register_webfonts_from_theme_json' );
 
 // kses actions&filters.
 add_action( 'init', 'gutenberg_global_styles_kses_init' );
