@@ -96,7 +96,7 @@
 		"parent": "how-to-guides"
 	},
 	{
-		"title": "App Platform",
+		"title": "Development Platform",
 		"slug": "platform",
 		"markdown_source": "../docs/how-to-guides/platform/README.md",
 		"parent": "how-to-guides"
