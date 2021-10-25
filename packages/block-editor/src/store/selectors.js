@@ -1980,7 +1980,7 @@ export const __experimentalGetPatternTransformItems = createSelector(
 		if (
 			blocks.some(
 				( { clientId, innerBlocks } ) =>
-					innerBlocks.length ||
+					innerBlocks?.length ||
 					areInnerBlocksControlled( state, clientId )
 			)
 		) {
