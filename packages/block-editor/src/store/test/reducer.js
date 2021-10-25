@@ -1019,7 +1019,6 @@ describe( 'state', () => {
 			expect( state.tree.chicken ).toEqual( {
 				clientId: 'chicken',
 				name: 'core/test-block',
-				innerBlocks: [],
 				attributes: {
 					content: 'ribs',
 				},
