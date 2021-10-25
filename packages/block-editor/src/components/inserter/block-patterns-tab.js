@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { useMemo, useState, useCallback, useEffect } from '@wordpress/element';
+import { useState, useMemo, useCallback, useEffect } from '@wordpress/element';
 import { _x } from '@wordpress/i18n';
 import { useAsyncList } from '@wordpress/compose';
 
@@ -17,51 +17,12 @@ function BlockPatternsCategory( {
 	rootClientId,
 	onInsert,
 	selectedCategory,
-	onClickCategory,
+	populatedCategories,
 } ) {
-	const [ showPatternsExplorer, setShowPatternsExplorer ] = useState( false );
-	const [ allPatterns, allCategories, onClick ] = usePatternsState(
+	const [ allPatterns, , onClick ] = usePatternsState(
 		onInsert,
 		rootClientId
 	);
-
-	// Remove any empty categories
-	const populatedCategories = useMemo(
-		() =>
-			allCategories
-				.filter( ( category ) =>
-					allPatterns.some( ( pattern ) =>
-						pattern.categories?.includes( category.name )
-					)
-				)
-				.sort( ( { name: currentName }, { name: nextName } ) => {
-					if ( ! [ currentName, nextName ].includes( 'featured' ) ) {
-						return 0;
-					}
-					return currentName === 'featured' ? -1 : 1;
-				} ),
-		[ allPatterns, allCategories ]
-	);
-
-	const patternCategory = selectedCategory
-		? selectedCategory
-		: populatedCategories[ 0 ];
-
-	useEffect( () => {
-		if (
-			allPatterns.some(
-				( pattern ) => getPatternIndex( pattern ) === Infinity
-			) &&
-			! populatedCategories.find(
-				( category ) => category.name === 'uncategorized'
-			)
-		) {
-			populatedCategories.push( {
-				name: 'uncategorized',
-				label: _x( 'Uncategorized' ),
-			} );
-		}
-	}, [ populatedCategories, allPatterns ] );
 
 	const getPatternIndex = useCallback(
 		( pattern ) => {
@@ -89,11 +50,11 @@ function BlockPatternsCategory( {
 	const currentCategoryPatterns = useMemo(
 		() =>
 			allPatterns.filter( ( pattern ) =>
-				patternCategory.name === 'uncategorized'
+				selectedCategory.name === 'uncategorized'
 					? getPatternIndex( pattern ) === Infinity
-					: pattern.categories?.includes( patternCategory.name )
+					: pattern.categories?.includes( selectedCategory.name )
 			),
-		[ allPatterns, patternCategory ]
+		[ allPatterns, selectedCategory ]
 	);
 
 	// Ordering the patterns is important for the async rendering.
@@ -109,38 +70,17 @@ function BlockPatternsCategory( {
 		return null;
 	}
 
-	const patternListProps = {
-		shownPatterns: currentShownPatterns,
-		blockPatterns: currentCategoryPatterns,
-		onClickPattern: onClick,
-		label: patternCategory.label,
-		orientation: ! showPatternsExplorer ? 'vertical' : undefined,
-		isDraggable: ! showPatternsExplorer,
-	};
-	const blockPatternList = <BlockPatternList { ...patternListProps } />;
 	return (
-		<>
-			{ ! showPatternsExplorer && (
-				<PatternInserterPanel
-					selectedCategory={ patternCategory }
-					patternCategories={ populatedCategories }
-					onClickCategory={ onClickCategory }
-					onShowExplorer={ () => setShowPatternsExplorer( true ) }
-				>
-					{ blockPatternList }
-				</PatternInserterPanel>
-			) }
-			{ showPatternsExplorer && (
-				<PatternsExplorerModal
-					selectedCategory={ patternCategory }
-					patternCategories={ populatedCategories }
-					onClickCategory={ onClickCategory }
-					onModalClose={ () => setShowPatternsExplorer( false ) }
-				>
-					{ blockPatternList }
-				</PatternsExplorerModal>
-			) }
-		</>
+		<div className="block-editor-inserter__panel-content">
+			<BlockPatternList
+				shownPatterns={ currentShownPatterns }
+				blockPatterns={ currentCategoryPatterns }
+				onClickPattern={ onClick }
+				label={ selectedCategory.label }
+				orientation="vertical"
+				isDraggable
+			/>
+		</div>
 	);
 }
 
@@ -150,13 +90,81 @@ function BlockPatternsTabs( {
 	onClickCategory,
 	selectedCategory,
 } ) {
+	const [ showPatternsExplorer, setShowPatternsExplorer ] = useState( false );
+	const [ allPatterns, allCategories ] = usePatternsState();
+	// Remove any empty categories
+	const populatedCategories = useMemo(
+		() =>
+			allCategories
+				.filter( ( category ) =>
+					allPatterns.some( ( pattern ) =>
+						pattern.categories?.includes( category.name )
+					)
+				)
+				.sort( ( { name: currentName }, { name: nextName } ) => {
+					if ( ! [ currentName, nextName ].includes( 'featured' ) ) {
+						return 0;
+					}
+					return currentName === 'featured' ? -1 : 1;
+				} ),
+		[ allPatterns, allCategories ]
+	);
+	useEffect( () => {
+		if (
+			allPatterns.some( ( pattern ) => {
+				if ( ! pattern.categories?.length ) {
+					return true;
+				}
+				return pattern.categories.every(
+					( category ) =>
+						! populatedCategories
+							.map( ( { name } ) => name )
+							.includes( category )
+				);
+			} ) &&
+			! populatedCategories.find(
+				( category ) => category.name === 'uncategorized'
+			)
+		) {
+			populatedCategories.push( {
+				name: 'uncategorized',
+				label: _x( 'Uncategorized' ),
+			} );
+		}
+	}, [ populatedCategories, allPatterns ] );
+
+	const patternCategory = selectedCategory
+		? selectedCategory
+		: populatedCategories[ 0 ];
+
 	return (
-		<BlockPatternsCategory
-			rootClientId={ rootClientId }
-			selectedCategory={ selectedCategory }
-			onInsert={ onInsert }
-			onClickCategory={ onClickCategory }
-		/>
+		<>
+			{ ! showPatternsExplorer && (
+				<>
+					<PatternInserterPanel
+						selectedCategory={ patternCategory }
+						patternCategories={ populatedCategories }
+						onClickCategory={ onClickCategory }
+						openPatternExplorer={ () =>
+							setShowPatternsExplorer( true )
+						}
+					/>
+					<BlockPatternsCategory
+						rootClientId={ rootClientId }
+						onInsert={ onInsert }
+						selectedCategory={ patternCategory }
+						populatedCategories={ populatedCategories }
+					/>
+				</>
+			) }
+			{ showPatternsExplorer && (
+				<PatternsExplorerModal
+					initialCategory={ patternCategory }
+					patternCategories={ populatedCategories }
+					onModalClose={ () => setShowPatternsExplorer( false ) }
+				/>
+			) }
+		</>
 	);
 }
 
