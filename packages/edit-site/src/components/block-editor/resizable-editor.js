@@ -134,6 +134,7 @@ function ResizableEditor( { enableResizing, settings, ...props } ) {
 					omit( styles, [ 'width', 'height', 'margin' ] )
 				}
 				head={ <EditorStyles styles={ settings.styles } /> }
+				assets={ settings.resolvedAssets }
 				ref={ ref }
 				name="editor-canvas"
 				className="edit-site-visual-editor__editor-canvas"
