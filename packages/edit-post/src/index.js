@@ -2,10 +2,7 @@
  * WordPress dependencies
  */
 import { store as blocksStore } from '@wordpress/blocks';
-import {
-	registerCoreBlocks,
-	__experimentalRegisterExperimentalCoreBlocks,
-} from '@wordpress/block-library';
+import { registerCoreBlocks } from '@wordpress/block-library';
 import { render, unmountComponentAtNode } from '@wordpress/element';
 import { dispatch } from '@wordpress/data';
 import { store as interfaceStore } from '@wordpress/interface';
@@ -100,11 +97,6 @@ export function initializeEditor(
 
 	dispatch( blocksStore ).__experimentalReapplyBlockTypeFilters();
 	registerCoreBlocks();
-	if ( process.env.GUTENBERG_PHASE === 2 ) {
-		__experimentalRegisterExperimentalCoreBlocks( {
-			enableFSEBlocks: settings.__unstableEnableFullSiteEditingBlocks,
-		} );
-	}
 
 	// Show a console log warning if the browser is not in Standards rendering mode.
 	const documentMode =

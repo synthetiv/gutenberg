@@ -12,7 +12,6 @@ import { render, unmountComponentAtNode } from '@wordpress/element';
 import {
 	registerCoreBlocks,
 	__experimentalGetCoreBlocks,
-	__experimentalRegisterExperimentalCoreBlocks,
 } from '@wordpress/block-library';
 import { __experimentalFetchLinkSuggestions as fetchLinkSuggestions } from '@wordpress/core-data';
 import {
@@ -30,15 +29,15 @@ import './filters';
 import * as widgetArea from './blocks/widget-area';
 
 import Layout from './components/layout';
-import {
-	ALLOW_REUSABLE_BLOCKS,
-	ENABLE_EXPERIMENTAL_FSE_BLOCKS,
-} from './constants';
+import { ALLOW_REUSABLE_BLOCKS } from './constants';
 
 const disabledBlocks = [
 	'core/more',
 	'core/freeform',
 	...( ALLOW_REUSABLE_BLOCKS ? [] : [ 'core/block' ] ),
+	'core/home-link',
+	'core/template-part',
+	'core/term-description',
 ];
 
 /**
@@ -72,7 +71,8 @@ export function initialize( id, settings ) {
 			disabledBlocks.includes( block.name ) ||
 			block.name.startsWith( 'core/post' ) ||
 			block.name.startsWith( 'core/query' ) ||
-			block.name.startsWith( 'core/site' )
+			block.name.startsWith( 'core/site' ) ||
+			block.name.startsWith( 'core/navigation' )
 		);
 	} );
 
@@ -86,11 +86,6 @@ export function initialize( id, settings ) {
 	dispatch( blocksStore ).__experimentalReapplyBlockTypeFilters();
 	registerCoreBlocks( coreBlocks );
 	registerLegacyWidgetBlock();
-	if ( process.env.GUTENBERG_PHASE === 2 ) {
-		__experimentalRegisterExperimentalCoreBlocks( {
-			enableFSEBlocks: ENABLE_EXPERIMENTAL_FSE_BLOCKS,
-		} );
-	}
 	registerLegacyWidgetVariations( settings );
 	registerBlock( widgetArea );
 	registerWidgetGroupBlock();

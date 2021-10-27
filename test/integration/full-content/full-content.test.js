@@ -15,10 +15,7 @@ import {
 	unstable__bootstrapServerSideBlockDefinitions, // eslint-disable-line camelcase
 } from '@wordpress/blocks';
 import { parse as grammarParse } from '@wordpress/block-serialization-default-parser';
-import {
-	registerCoreBlocks,
-	__experimentalRegisterExperimentalCoreBlocks,
-} from '@wordpress/block-library';
+import { registerCoreBlocks } from '@wordpress/block-library';
 import prettierConfig from '@wordpress/prettier-config';
 
 /**
@@ -72,11 +69,6 @@ describe( 'full post content fixture', () => {
 		// Load all hooks that modify blocks
 		require( '../../../packages/editor/src/hooks' );
 		registerCoreBlocks();
-		if ( process.env.GUTENBERG_PHASE === 2 ) {
-			__experimentalRegisterExperimentalCoreBlocks( {
-				enableFSEBlocks: true,
-			} );
-		}
 	} );
 
 	let spacer = 4;

@@ -98,12 +98,6 @@ class WP_REST_Block_Editor_Settings_Controller extends WP_REST_Controller {
 			'title'      => 'block-editor-settings-item',
 			'type'       => 'object',
 			'properties' => array(
-				'__unstableEnableFullSiteEditingBlocks'  => array(
-					'description' => __( 'Enables experimental Full Site Editing blocks', 'gutenberg' ),
-					'type'        => 'boolean',
-					'context'     => array( 'post-editor', 'site-editor', 'widgets-editor' ),
-				),
-
 				'styles'                                 => array(
 					'description' => __( 'Editor styles', 'gutenberg' ),
 					'type'        => 'array',

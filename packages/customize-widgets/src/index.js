@@ -5,7 +5,6 @@ import { render } from '@wordpress/element';
 import {
 	registerCoreBlocks,
 	__experimentalGetCoreBlocks,
-	__experimentalRegisterExperimentalCoreBlocks,
 } from '@wordpress/block-library';
 import {
 	registerLegacyWidgetBlock,
@@ -29,8 +28,14 @@ import './filters';
 
 const { wp } = window;
 
-const DISABLED_BLOCKS = [ 'core/more', 'core/block', 'core/freeform' ];
-const ENABLE_EXPERIMENTAL_FSE_BLOCKS = false;
+const DISABLED_BLOCKS = [
+	'core/more',
+	'core/block',
+	'core/freeform',
+	'core/home-link',
+	'core/template-part',
+	'core/term-description',
+];
 
 /**
  * Initializes the widgets block editor in the customizer.
@@ -50,16 +55,12 @@ export function initialize( editorName, blockEditorSettings ) {
 			DISABLED_BLOCKS.includes( block.name ) ||
 			block.name.startsWith( 'core/post' ) ||
 			block.name.startsWith( 'core/query' ) ||
-			block.name.startsWith( 'core/site' )
+			block.name.startsWith( 'core/site' ) ||
+			block.name.startsWith( 'core/navigation' )
 		);
 	} );
 	registerCoreBlocks( coreBlocks );
 	registerLegacyWidgetBlock();
-	if ( process.env.GUTENBERG_PHASE === 2 ) {
-		__experimentalRegisterExperimentalCoreBlocks( {
-			enableFSEBlocks: ENABLE_EXPERIMENTAL_FSE_BLOCKS,
-		} );
-	}
 	registerLegacyWidgetVariations( blockEditorSettings );
 	registerWidgetGroupBlock();
 

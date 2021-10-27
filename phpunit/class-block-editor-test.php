@@ -162,8 +162,7 @@ class WP_Test_Block_Editor extends WP_UnitTestCase {
 	function test_get_default_block_editor_settings() {
 		$settings = gutenberg_get_default_block_editor_settings();
 
-		$this->assertCount( 17, $settings );
-		$this->assertFalse( $settings['__unstableEnableFullSiteEditingBlocks'] );
+		$this->assertCount( 16, $settings );
 		$this->assertFalse( $settings['alignWide'] );
 		$this->assertInternalType( 'array', $settings['allowedMimeTypes'] );
 		$this->assertTrue( $settings['allowedBlockTypes'] );
