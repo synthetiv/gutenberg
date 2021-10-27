@@ -121,13 +121,6 @@ function gutenberg_experimental_global_styles_settings( $settings ) {
 		$settings['__experimentalStyles'] = $consolidated->get_raw_data()['styles'];
 	}
 
-	if ( 'site-editor' === $context && gutenberg_experimental_is_site_editor_available() ) {
-		$theme = WP_Theme_JSON_Resolver_Gutenberg::get_merged_data( $settings, 'theme' );
-
-		$settings['__experimentalGlobalStylesBaseConfig']['styles']   = $theme->get_raw_data()['styles'];
-		$settings['__experimentalGlobalStylesBaseConfig']['settings'] = $theme->get_settings();
-	}
-
 	if ( 'other' === $context ) {
 		$block_styles  = array( 'css' => gutenberg_experimental_global_styles_get_stylesheet( $consolidated, 'block_styles' ) );
 		$css_variables = array(
