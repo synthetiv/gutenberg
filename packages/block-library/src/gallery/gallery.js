@@ -16,6 +16,11 @@ import { __ } from '@wordpress/i18n';
 import { createBlock } from '@wordpress/blocks';
 import { View } from '@wordpress/primitives';
 
+/**
+ * Internal dependencies
+ */
+import MobileWarning from './mobile-warning';
+
 const allowedBlocks = [ 'core/image' ];
 
 export const Gallery = ( props ) => {
@@ -71,6 +76,7 @@ export const Gallery = ( props ) => {
 				}
 			) }
 		>
+			<MobileWarning />
 			{ children }
 
 			<View
