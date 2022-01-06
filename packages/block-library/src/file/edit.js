@@ -136,6 +136,14 @@ function FileEdit( {
 
 	function onUploadError( message ) {
 		setHasError( true );
+		setAttributes( {
+			href: undefined,
+			fileName: undefined,
+			textLinkHref: undefined,
+			id: undefined,
+			displayPreview: undefined,
+			previewHeight: undefined,
+		} );
 		noticeOperations.removeAllNotices();
 		noticeOperations.createErrorNotice( message );
 	}

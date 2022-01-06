@@ -161,6 +161,7 @@ export function ImageEdit( {
 		// If the image block was not replaced with an embed,
 		// clear the attributes and trigger the placeholder.
 		if ( ! isReplaced ) {
+			setTemporaryURL();
 			setAttributes( {
 				url: undefined,
 				id: undefined,
@@ -175,6 +176,8 @@ export function ImageEdit( {
 
 	function onSelectImage( media ) {
 		if ( ! media || ! media.url ) {
+			setTemporaryURL();
+
 			setAttributes( {
 				url: undefined,
 				alt: undefined,
@@ -307,6 +310,7 @@ export function ImageEdit( {
 				onError: ( message ) => {
 					isTemp = false;
 					noticeOperations.createErrorNotice( message );
+					setTemporaryURL();
 					setAttributes( {
 						src: undefined,
 						id: undefined,

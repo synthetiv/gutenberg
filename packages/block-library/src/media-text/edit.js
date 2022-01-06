@@ -74,6 +74,20 @@ function attributesFromMedia( {
 	return ( media ) => {
 		let mediaType;
 		let src;
+
+		if ( ! media ) {
+			setAttributes( {
+				mediaAlt: undefined,
+				mediaId: undefined,
+				mediaType: undefined,
+				mediaUrl: undefined,
+				mediaLink: undefined,
+				href: undefined,
+				focalPoint: undefined,
+			} );
+			return;
+		}
+
 		// for media selections originated from a file upload.
 		if ( media.media_type ) {
 			if ( media.media_type === 'image' ) {
